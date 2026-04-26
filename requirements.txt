@@ -1,0 +1,4 @@
+anticaptchaofficial==1.0.69
+selenium==4.41.0
+python-dotenv==1.2.1
+pdfkit==1.0.0
