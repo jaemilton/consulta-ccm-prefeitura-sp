@@ -170,6 +170,15 @@ shadow_host = driver.find_element(By.CSS_SELECTOR, "prodamsp-componente-consenti
 # Use the shadow_root property in Python (or get_shadow_root() method in other languages)
 shadow_root: ShadowRoot = shadow_host.shadow_root 
 
+# wait for the button to be present in the shadow DOM
+wait = WebDriverWait(driver, 10)
+#wait "input[type='button'].cc__button__autorizacao--all"
+try:
+    wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "input[type='button'].cc__button__autorizacao--all")))
+except TimeoutException:
+    print("Button not found in shadow DOM after waiting.")
+    pass
+
 if check_if_element_exists(shadow_root, By.CSS_SELECTOR, "input[type='button'].cc__button__autorizacao--all"):
     shadow_root.find_element(By.CSS_SELECTOR, "input[type='button'].cc__button__autorizacao--all").click()
 
@@ -179,7 +188,9 @@ import csv
 with open('cpfs.csv', newline='') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
-        cpf_list.append(row[0])
+        #remove non-numeric characters from the cpf value
+        cleaned_cpf = row[0].strip().replace('.', '').replace('-', '')
+        cpf_list.append(cleaned_cpf)
 
 
 date_time_now_with_hours = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
